@@ -1,0 +1,96 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file('SunnyEaster.jks')
+            storePassword "Quatius@Quatius"
+            keyAlias "sunnyeaster"
+            keyPassword "Quatius@Quatius"
+        }
+    }
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+    defaultConfig {
+        applicationId "base.wujiang.com.baseproject"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        packagingOptions {
+            exclude 'META-INF/rxjava.properties'
+        }
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        flavorDimensions "default"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    //    testImplementation 'junit:junit:4.12'
+    //    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //fast解析
+    implementation files('libs/fastjson-1.1.34.android.jar')
+    //    implementation files('libs/flycodialog.jar')
+    //弹框控件
+    implementation 'com.flyco.dialog:FlycoDialog_Lib:1.2.2@aar'
+    implementation 'com.flyco.animation:FlycoAnimation_Lib:1.0.0@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    //gson解析
+    implementation files('libs/gson-2.2.2.jar')
+    //工具集
+    implementation project(':xutils')
+    //访问网络的okgo
+    implementation 'com.lzy.net:okgo:3.0.4'
+    implementation 'com.lzy.net:okrx:1.0.2'
+    implementation 'com.lzy.net:okrx2:2.0.2'
+    implementation 'com.lzy.net:okserver:2.0.5'
+    implementation('com.lzy.net:okgo:3.0.4', {
+        exclude module: "okhttp"
+    })
+    //    implementation project(':okgo')
+    //recyclerview
+    //广告栏
+    implementation 'com.youth.banner:banner:1.4.10'
+    //图片展示工具类
+    implementation 'com.github.bumptech.glide:glide:3.3.+'
+    //注解butterknife
+    //    implementation 'com.jakewharton:butterknife:10.0.0'
+    //    annotationProcessor 'com.jakewharton:butterknife-implementationr:10.0.0'
+
+    //    implementation 'com.android.support:support-v4:28.0.3'
+    //    implementation 'com.android.support:appcompat-v7:28.0.3'
+    //    implementation 'com.android.support:recyclerview-v7:28.0.3'
+    implementation project(':okrx')
+    implementation project(':okrx2')
+    //图片展示工具类
+    implementation 'com.facebook.fresco:fresco:0.12.0'
+    implementation 'com.facebook.fresco:imagepipeline-okhttp3:0.12.0+'
+    //友盟必要jar包
+    implementation 'com.umeng.umsdk:analytics:7.5.4'
+    implementation 'com.umeng.umsdk:common:1.5.4'
+    //友盟第三方登录分享需要jar包
+    implementation files('libs/umeng-share-QQ-simplify-6.9.4.jar')
+    implementation files('libs/umeng-share-wechat-simplify-6.9.4.jar')
+    implementation files('libs/umeng-share-core-6.9.4.jar')
+    implementation files('libs/umeng-sharetool-6.9.4.jar')
+    //加载动画
+    implementation project(':loading_library')
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+}

@@ -1,0 +1,116 @@
+package base.wujiang.com.baseproject.fragment;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.TextView;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
+import java.util.List;
+
+import base.wujiang.com.baseproject.MyApplication;
+import base.wujiang.com.baseproject.R;
+import base.wujiang.com.baseproject.base.ReObject;
+import base.wujiang.com.baseproject.base.ReturnMap;
+import base.wujiang.com.baseproject.task.GeneralQueryTask;
+import base.wujiang.com.baseproject.util.JsonUtil;
+import base.wujiang.com.baseproject.util.JsonUtilMVC;
+import base.wujiang.com.baseproject.vo.Person;
+
+
+/**
+ * 主fragment
+ */
+@ContentView(R.layout.f_main_home)
+public class MainHomeFragment extends Fragment {
+
+
+    @ViewInject(R.id.tvtitle)
+    private TextView tvtitle;
+
+    /**
+     * 上下文
+     */
+    private Context context;
+    /**
+     * 当前View
+     */
+    private View fragment;
+
+    /**
+     * 请求的当前页
+     */
+    private int pageNumber = 1;
+
+    /**
+     * 每次查询的信息数量
+     */
+    private int pageSize = 10;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context =getContext();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //        return super.onCreateView(inflater, container, savedInstanceState);
+        fragment = inflater.inflate(R.layout.f_main_home, container, false);
+        getData();
+        return x.view().inject(this,inflater,container);
+    }
+
+    private void getData() {
+//        GeneralQueryTask task = new GeneralQueryTask(getActivity(), this, "hon", GeneralQueryTask.GeneralQueryType.honInfo, true);
+//        String[] params = new String[] { "1", "10000", MyApplication.person.getUnitId(), "" };
+//        task.loadData(params);
+        GeneralQueryTask task = new GeneralQueryTask(getActivity(), this, "firemenService", GeneralQueryTask.GeneralQueryType.queryLDFireManInfos, true);
+        String[] params = new String[] { pageNumber+"", pageSize+""};
+        task.loadData(params);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        tvtitle.setText("主页");
+    }
+
+    public void reloadData(ReturnMap ro)
+    {
+        JSONObject jobj = (JSONObject) ro.getData();
+        JSONArray jarr = jobj.getJSONArray("persons");
+        if (jarr != null)
+        {
+            List<Person> personList = JsonUtilMVC.getListFromJson(jarr, Person.class);
+            Log.e("tag",personList.size()+"");
+        }
+    }
+    public void reloadObjData(ReObject ro)
+    {
+        List<Person> personList = JsonUtil.getListFromJson(ro,Person.class);
+        if (personList != null)
+        {
+        }
+    }
+    @Event( type = AdapterView.OnItemClickListener.class,value = {R.id.btHome})
+    private void onItemClick(AdapterView<?> av, View view, int pos, long id)
+    {
+
+    }
+
+}

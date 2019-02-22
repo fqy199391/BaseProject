@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MyNewTest</string>
+    <string name="main_menu_home">首页</string>
+    <string name="main_menu_message">消息</string>
+    <string name="main_menu_task">任务</string>
+    <string name="main_menu_me">我的</string>
+
+    <string name="txt_net_config">网络设置</string>
+    <string name="txt_server_config">系统服务器设置</string>
+    <string name="txt_server_ip">IP地址</string>
+    <string name="txt_hint_server_ip">请输入Ip地址</string>
+    <string name="txt_server_port">端口号</string>
+    <string name="txt_hint_server_port">请输入端口号</string>
+    <string name="text_submit">确&#160;认</string>
+    <string name="text_login">登&#160;录</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

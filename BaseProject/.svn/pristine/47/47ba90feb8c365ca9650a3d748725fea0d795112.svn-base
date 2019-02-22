@@ -1,0 +1,258 @@
+package base.wujiang.com.baseproject.fragment;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.alibaba.fastjson.JSONObject;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
+
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
+import base.wujiang.com.baseproject.MyApplication;
+import base.wujiang.com.baseproject.R;
+import base.wujiang.com.baseproject.activity.HomeActivity;
+import base.wujiang.com.baseproject.activity.IpPortActivity;
+import base.wujiang.com.baseproject.base.ReturnMap;
+import base.wujiang.com.baseproject.callback.StringDialogCallback;
+import base.wujiang.com.baseproject.util.Constants;
+import base.wujiang.com.baseproject.util.EncodeString;
+import base.wujiang.com.baseproject.util.JsonUtilMVC;
+import base.wujiang.com.baseproject.util.Util;
+import base.wujiang.com.baseproject.vo.Person;
+
+
+/**
+ * 主fragment
+ */
+@ContentView(R.layout.f_login)
+public class LoginFragment extends Fragment {
+
+
+
+    /**
+     * 按钮
+     */
+    @ViewInject(R.id.btLogin)
+    private TextView btLogin;
+
+    /**
+     *
+     */
+    @ViewInject(R.id.edtUcode)
+    private EditText edtUcode;
+
+    /**
+     *
+     */
+    @ViewInject(R.id.edtPassword)
+    private EditText edtPassword;
+
+    /**
+     *
+     */
+    @ViewInject(R.id.cb_auto_sign_in)
+    private CheckBox cbAutoSignIn;
+
+    /**
+     *
+     */
+    @ViewInject(R.id.cb_remeberpassword)
+    private CheckBox cbRemeberPassword;
+
+
+    /**
+     * 上下文
+     */
+    private Context context;
+    /**
+     * 当前View
+     */
+    private View fragment;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getContext();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //        return super.onCreateView(inflater, container, savedInstanceState);
+        fragment = inflater.inflate(R.layout.f_login, container, false);
+        return x.view().inject(this, inflater, container);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initView();
+    }
+
+    /**
+     * 初始化界面
+     */
+    private void initView() {
+        String savePassword = Util.readFromSHA(getActivity(), "savePassword", "0");
+        String userName = Util.readFromSHA(getActivity(), "userName", "tom");
+        String password = Util.readFromSHA(getActivity(), "password", "123");
+        String autoSignIn = Util.readFromSHA(getActivity(), "autoSignIn", "0");
+        if ("1".equals(savePassword)) {
+            edtUcode.setText(userName);
+            edtPassword.setText(password);
+            cbRemeberPassword.setChecked(true);
+        }
+        if ("1".equals(autoSignIn)) {
+            cbAutoSignIn.setChecked(true);
+            doLogin();
+        } else {
+            ((HomeActivity) getActivity()).removeSplashScreen();
+        }
+    }
+
+    /**
+     * 修改服务端地址
+     *
+     * @param v
+     */
+    @Event(R.id.btChangeIp)
+    public void onBtChangeIpClick(View v) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), IpPortActivity.class);
+        getActivity().startActivity(intent);
+    }
+
+    /**
+     * 登录点击事件
+     *
+     * @param view
+     */
+    @Event(R.id.btLogin)
+    private void onBtLoginClick(View view) {
+        doLogin();
+    }
+
+    /**
+     * 登录
+     */
+    private void doLogin() {
+        String userName = edtUcode.getText().toString();
+        String password = edtPassword.getText().toString();
+        if (Constants.IS_DEBUG) {
+            return;
+        }
+        if (null == userName || "".equals(userName) || null == password || "".equals(password)) {
+            Toast.makeText(this.getActivity(), "用户名密码不能为空！", Toast.LENGTH_LONG).show();
+            return;
+        }
+        String autoSignIn = cbAutoSignIn.isChecked() ? "1" : "0";
+        String savePassword = cbRemeberPassword.isChecked() ? "1" : "0";
+        if ("1".equals(autoSignIn)) {
+            savePassword = "1";
+        }
+        Util.writeToSHA(getActivity(), new String[]{"savePassword", "autoSignIn"}, new String[]{savePassword, autoSignIn});
+        if (autoSignIn.equals("1") || savePassword.equals("1")) {
+            Util.writeToSHA(getActivity(), new String[]{"userName", "password"}, new String[]{userName, password});
+        }
+        //        LoginTask task = new LoginTask(getActivity());
+        //        String[] param = { userName, password };
+        //        task.execute(param);
+        String url = Constants.BASE_URL_MVC_GETDATA + "hon/loginHon.action";
+
+
+
+
+//
+//        OkGo.<String>head(url)//
+//                .tag(this)//
+//                .params("user", userName)//
+//                .params("jmpwd", EncodeString.encodeByMD5(password))//
+//                .execute(new StringDialogCallback(this) {
+//                    @Override
+//                    public void onSuccess(Response<String> response) {
+//                        handleResponse(response);
+//                    }
+//
+//                    @Override
+//                    public void onError(Response<String> response) {
+//                        handleError(response);
+//                    }
+//                });
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        OkGo.<String>post(url)//
+                .tag(this)//
+                //                .headers("header1", "headerValue1")
+                .params("user", userName)//
+                .params("jmpwd", EncodeString.encodeByMD5(password))//
+                .execute(new StringDialogCallback(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String string = response.body().toString();
+                        Toast.makeText(context, "服务器", Toast.LENGTH_SHORT).show();
+                        ReturnMap returnMap = JSONObject.parseObject(string, ReturnMap.class);
+                        JSONObject jobj = (JSONObject) returnMap.getData();
+                        JSONObject per = jobj.getJSONObject("person");
+                        JSONObject key = jobj.getJSONObject("keyunit");
+                        if (per != null)
+                        {
+                            Person person = JsonUtilMVC.getSingleObjectFromJson(per, Person.class);
+                            MyApplication.person = person;// 记录登录用户
+                        }
+                        ((HomeActivity) getActivity()).showMainUI();
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+
+                        if(response.body() == null)
+                        {
+                            return;
+                        }
+                        String string = response.body().toString();
+                        ReturnMap returnMap = JSONObject.parseObject(string, ReturnMap.class);
+                        Person person = JsonUtilMVC.getSingleObjectFromJson(returnMap, Person.class);
+                        if (returnMap != null) {
+                            Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "服务器异常", Toast.LENGTH_SHORT).show();
+                        }
+                        if (person != null) {
+                            Toast.makeText(context, person.getName(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "服务器异常111", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+}

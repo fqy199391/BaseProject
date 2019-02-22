@@ -1,0 +1,59 @@
+package base.wujiang.com.baseproject;
+
+import android.app.Application;
+
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheEntity;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.HttpHeaders;
+import com.lzy.okgo.model.HttpParams;
+
+import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import base.wujiang.com.baseproject.util.Constants;
+import base.wujiang.com.baseproject.vo.Person;
+
+
+public class MyApplication extends Application {
+
+    /**
+     * 全局实例
+     */
+    public static MyApplication instance;
+
+    /**
+     * 当前登录用户
+     */
+    public static Person person;
+
+    public static List<?> images=new ArrayList<>();
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+        Constants.reGenConstants();
+        x.Ext.init(this);
+        // 是否输出debug日志, 开启debug会影响性能.
+        x.Ext.setDebug(true);
+        HttpHeaders headers = new HttpHeaders();
+//        headers.put("commonHeaderKey1", "commonHeaderValue1");    //header不支持中文，不允许有特殊字符
+        HttpParams params = new HttpParams();
+//        params.put("commonParamsKey1", "commonParamsValue1");     //param支持中文,直接传,不要自己编码
+        OkGo.getInstance().init(this)                           //必须调用初始化
+                .setCacheMode(CacheMode.NO_CACHE)               //全局统一缓存模式，默认不使用缓存，可以不传
+                .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)   //全局统一缓存时间，默认永不过期，可以不传
+                .setRetryCount(3)                               //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
+                .addCommonHeaders(headers)                      //全局公共头
+                .addCommonParams(params);                       //全局公共参数
+    }
+
+    @Override
+    public void onTerminate()
+    {
+        super.onTerminate();
+    }
+}
+

@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName '1.0'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.1'
+//    implementation "com.lzy.net:okgo:$versionName_okgo"
+    implementation project(':okgo')
+}
+
+//apply from: 'bintray.gradle'

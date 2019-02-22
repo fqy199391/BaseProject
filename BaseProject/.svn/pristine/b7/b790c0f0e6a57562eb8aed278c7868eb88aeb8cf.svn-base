@@ -1,0 +1,24 @@
+/**
+ * 金鸽公司源代码，版权归金鸽公司所有。<br>
+ * 项目名称 : JingeApp
+ */
+
+package base.wujiang.com.baseproject.base;
+
+/**  
+ * 概要说明 : 从智慧消防单兵终端拷贝.  <br>
+ * 详细说明 : 过度动画使用.  <br>
+ * 创建时间 : 2017-7-13 下午3:49:48 <br>
+ * @author by luyonglong  
+ */
+public interface IShowMainUI
+{
+    /**
+     */
+    void showMainUI();
+
+    /**
+     * 关掉过度动画
+     */
+    void removeSplashScreen();
+}
